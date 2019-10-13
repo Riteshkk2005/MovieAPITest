@@ -1,0 +1,215 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="MovieDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="MovieRating">
+          <Key>
+            <PropertyRef Name="UserId" />
+            <PropertyRef Name="MovieId" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="bigint" Nullable="false" />
+          <Property Name="MovieId" Type="bigint" Nullable="false" />
+          <Property Name="Rating" Type="tinyint" />
+        </EntityType>
+        <EntityType Name="MoviesList">
+          <Key>
+            <PropertyRef Name="MovieId" />
+          </Key>
+          <Property Name="MovieId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="YearOfRelease" Type="int" />
+          <Property Name="runningTimeInMinutes" Type="tinyint" Nullable="false" />
+          <Property Name="Genres" Type="nchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UserList">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Address" Type="nvarchar" MaxLength="500" />
+          <Property Name="Age" Type="tinyint" Nullable="false" />
+          <Property Name="EmailAddress" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="15" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_MovieRating_MoviesList1">
+          <End Role="MoviesList" Type="Self.MoviesList" Multiplicity="1" />
+          <End Role="MovieRating" Type="Self.MovieRating" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MoviesList">
+              <PropertyRef Name="MovieId" />
+            </Principal>
+            <Dependent Role="MovieRating">
+              <PropertyRef Name="MovieId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MovieRating_UserList">
+          <End Role="UserList" Type="Self.UserList" Multiplicity="1" />
+          <End Role="MovieRating" Type="Self.MovieRating" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserList">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="MovieRating">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="MovieDBModelStoreContainer">
+          <EntitySet Name="MovieRating" EntityType="Self.MovieRating" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MoviesList" EntityType="Self.MoviesList" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserList" EntityType="Self.UserList" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_MovieRating_MoviesList1" Association="Self.FK_MovieRating_MoviesList1">
+            <End Role="MoviesList" EntitySet="MoviesList" />
+            <End Role="MovieRating" EntitySet="MovieRating" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MovieRating_UserList" Association="Self.FK_MovieRating_UserList">
+            <End Role="UserList" EntitySet="UserList" />
+            <End Role="MovieRating" EntitySet="MovieRating" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="MovieDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="MovieRating">
+          <Key>
+            <PropertyRef Name="UserId" />
+            <PropertyRef Name="MovieId" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Int64" Nullable="false" />
+          <Property Name="MovieId" Type="Int64" Nullable="false" />
+          <Property Name="Rating" Type="Byte" />
+          <NavigationProperty Name="MoviesList" Relationship="Self.FK_MovieRating_MoviesList1" FromRole="MovieRating" ToRole="MoviesList" />
+          <NavigationProperty Name="UserList" Relationship="Self.FK_MovieRating_UserList" FromRole="MovieRating" ToRole="UserList" />
+        </EntityType>
+        <EntityType Name="MoviesList">
+          <Key>
+            <PropertyRef Name="MovieId" />
+          </Key>
+          <Property Name="MovieId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" MaxLength="500" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="YearOfRelease" Type="Int32" />
+          <Property Name="runningTimeInMinutes" Type="Byte" Nullable="false" />
+          <Property Name="Genres" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="MovieRatings" Relationship="Self.FK_MovieRating_MoviesList1" FromRole="MoviesList" ToRole="MovieRating" />
+        </EntityType>
+        <EntityType Name="UserList">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Address" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Age" Type="Byte" Nullable="false" />
+          <Property Name="EmailAddress" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Phone" Type="String" MaxLength="15" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="MovieRatings" Relationship="Self.FK_MovieRating_UserList" FromRole="UserList" ToRole="MovieRating" />
+        </EntityType>
+        <Association Name="FK_MovieRating_MoviesList1">
+          <End Role="MoviesList" Type="Self.MoviesList" Multiplicity="1" />
+          <End Role="MovieRating" Type="Self.MovieRating" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MoviesList">
+              <PropertyRef Name="MovieId" />
+            </Principal>
+            <Dependent Role="MovieRating">
+              <PropertyRef Name="MovieId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MovieRating_UserList">
+          <End Role="UserList" Type="Self.UserList" Multiplicity="1" />
+          <End Role="MovieRating" Type="Self.MovieRating" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserList">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="MovieRating">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="MovieDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="MovieRatings" EntityType="Self.MovieRating" />
+          <EntitySet Name="MoviesLists" EntityType="Self.MoviesList" />
+          <EntitySet Name="UserLists" EntityType="Self.UserList" />
+          <AssociationSet Name="FK_MovieRating_MoviesList1" Association="Self.FK_MovieRating_MoviesList1">
+            <End Role="MoviesList" EntitySet="MoviesLists" />
+            <End Role="MovieRating" EntitySet="MovieRatings" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MovieRating_UserList" Association="Self.FK_MovieRating_UserList">
+            <End Role="UserList" EntitySet="UserLists" />
+            <End Role="MovieRating" EntitySet="MovieRatings" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="MovieDBModelStoreContainer" CdmEntityContainer="MovieDBEntities">
+          <EntitySetMapping Name="MovieRatings">
+            <EntityTypeMapping TypeName="MovieDBModel.MovieRating">
+              <MappingFragment StoreEntitySet="MovieRating">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="MovieId" ColumnName="MovieId" />
+                <ScalarProperty Name="Rating" ColumnName="Rating" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MoviesLists">
+            <EntityTypeMapping TypeName="MovieDBModel.MoviesList">
+              <MappingFragment StoreEntitySet="MoviesList">
+                <ScalarProperty Name="MovieId" ColumnName="MovieId" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="YearOfRelease" ColumnName="YearOfRelease" />
+                <ScalarProperty Name="runningTimeInMinutes" ColumnName="runningTimeInMinutes" />
+                <ScalarProperty Name="Genres" ColumnName="Genres" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserLists">
+            <EntityTypeMapping TypeName="MovieDBModel.UserList">
+              <MappingFragment StoreEntitySet="UserList">
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Age" ColumnName="Age" />
+                <ScalarProperty Name="EmailAddress" ColumnName="EmailAddress" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
